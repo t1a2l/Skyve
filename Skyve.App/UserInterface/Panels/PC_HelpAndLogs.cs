@@ -255,7 +255,7 @@ public partial class PC_HelpAndLogs : PanelContent
 		PlatformUtil.OpenUrl("https://www.buymeacoffee.com/tdwsvillage");
 	}
 
-	private void slickScroll1_Scroll(object sender, ScrollEventArgs e)
+	private void SlickScroll1_Scroll(object sender, ScrollEventArgs e)
 	{
 		slickSpacer3.Visible = slickScroll1.Percentage != 0;
 	}

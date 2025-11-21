@@ -146,9 +146,10 @@ namespace Skyve.App
 			this.PI_Playsets.Loading = false;
 			this.PI_Playsets.Selected = false;
 			this.PI_Playsets.SubItems = new SlickControls.PanelItem[] {
-        this.PI_CurrentPlayset,
-        this.PI_ViewPlaysets,
-        this.PI_AddPlayset};
+				this.PI_CurrentPlayset,
+				this.PI_ViewPlaysets,
+				this.PI_AddPlayset
+			};
 			this.PI_Playsets.Text = "Playsets";
 			// 
 			// PI_CurrentPlayset
@@ -320,10 +321,11 @@ namespace Skyve.App
 			this.PI_CompatibilityManagement.Loading = false;
 			this.PI_CompatibilityManagement.Selected = false;
 			this.PI_CompatibilityManagement.SubItems = new SlickControls.PanelItem[] {
-        this.PI_ManageYourPackages,
-        this.PI_ManageSinglePackage,
-        this.PI_ReviewRequests,
-        this.PI_ManageAllCompatibility};
+				this.PI_ManageYourPackages,
+				this.PI_ManageSinglePackage,
+				this.PI_ReviewRequests,
+				this.PI_ManageAllCompatibility
+			};
 			this.PI_CompatibilityManagement.Text = "ManageCompatibilityData";
 			// 
 			// PI_ManageYourPackages

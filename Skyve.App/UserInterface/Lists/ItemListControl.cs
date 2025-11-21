@@ -228,7 +228,7 @@ public partial class ItemListControl<T> : SlickStackedListControl<T, ItemListCon
 			{
 				if (!item.Item.IsLocal)
 				{
-					_subscriptionsManager.Subscribe(new IPackage[] { item.Item });
+					_subscriptionsManager.Subscribe([item.Item]);
 				}
 
 				return;
@@ -478,7 +478,7 @@ public partial class ItemListControl<T> : SlickStackedListControl<T, ItemListCon
 
 				SlickButton.DrawButton(e, PopupSearchRect1.Location, PopupSearchRect1.Size, Locale.SearchWorkshop, UI.Font(9.75F), back, fore, icon1, UI.Scale(new Padding(7), UI.UIScale), true, PopupSearchRect1.Contains(CursorLocation) ? HoverState : HoverState.Normal, ColorStyle.Active);
 
-				PopupSearchRect2 = new Rectangle(PopupSearchRect1.X, PopupSearchRect1.Bottom + (Padding.Vertical * 2), buttonSize2.Width, buttonSize2.Height);
+                PopupSearchRect2 = new Rectangle(PopupSearchRect1.X, PopupSearchRect1.Bottom + (Padding.Vertical * 2), buttonSize2.Width, buttonSize2.Height);
 
 				SlickButton.GetColors(out fore, out back, PopupSearchRect2.Contains(CursorLocation) ? HoverState : HoverState.Normal);
 
@@ -489,7 +489,7 @@ public partial class ItemListControl<T> : SlickStackedListControl<T, ItemListCon
 
 				SlickButton.DrawButton(e, PopupSearchRect2.Location, PopupSearchRect2.Size, Locale.SearchWorkshopBrowser, UI.Font(9.75F), back, fore, icon2, UI.Scale(new Padding(7), UI.UIScale), true, PopupSearchRect2.Contains(CursorLocation) ? HoverState : HoverState.Normal, ColorStyle.Active);
 
-				Cursor = PopupSearchRect1.Contains(CursorLocation) || PopupSearchRect2.Contains(CursorLocation) ? Cursors.Hand : Cursors.Default;
+                Cursor = PopupSearchRect1.Contains(CursorLocation) || PopupSearchRect2.Contains(CursorLocation) ? Cursors.Hand : Cursors.Default;
 			}
 			else
 			{
@@ -501,7 +501,7 @@ public partial class ItemListControl<T> : SlickStackedListControl<T, ItemListCon
 
 	public void ShowRightClickMenu(T item)
 	{
-		var items = ServiceCenter.Get<ICustomPackageService>().GetRightClickMenuItems((SelectedItems.Count > 0 ? SelectedItems.Select(x => x.Item) : new T[] { item }).Cast<IPackage>());
+		var items = ServiceCenter.Get<ICustomPackageService>().GetRightClickMenuItems((SelectedItems.Count > 0 ? SelectedItems.Select(x => x.Item) : [item]).Cast<IPackage>());
 
 		this.TryBeginInvoke(() => SlickToolStrip.Show(FindForm() as SlickForm, items));
 	}
@@ -549,9 +549,9 @@ public partial class ItemListControl<T> : SlickStackedListControl<T, ItemListCon
 		}
 	}
 
-	public class Rectangles : IDrawableItemRectangles<T>
+	public class Rectangles(T item) : IDrawableItemRectangles<T>
 	{
-		public Dictionary<ITag, Rectangle> TagRects = new();
+		public Dictionary<ITag, Rectangle> TagRects = [];
 		public Rectangle IncludedRect;
 		public Rectangle EnabledRect;
 		public Rectangle FolderRect;
@@ -569,14 +569,9 @@ public partial class ItemListControl<T> : SlickStackedListControl<T, ItemListCon
 		public Rectangle GithubRect;
 		public Rectangle FolderNameRect;
 
-		public T Item { get; set; }
+        public T Item { get; set; } = item;
 
-		public Rectangles(T item)
-		{
-			Item = item;
-		}
-
-		public bool IsHovered(Control instance, Point location)
+        public bool IsHovered(Control instance, Point location)
 		{
 			return
 				IncludedRect.Contains(location) ||
@@ -724,7 +719,7 @@ public partial class ItemListControl<T> : SlickStackedListControl<T, ItemListCon
 				}
 			}
 
-			if (VersionRect.Contains(location) && Item.LocalParentPackage?.Mod is IMod mod)
+            if (VersionRect.Contains(location) && Item.LocalParentPackage?.Mod is not null)
 			{
 				text = Locale.CopyVersionNumber;
 				point = VersionRect.Location;

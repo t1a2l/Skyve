@@ -205,21 +205,16 @@ public class DlcListControl : SlickStackedListControl<IDlcInfo, DlcListControl.R
 		return rects;
 	}
 
-	public class Rectangles : IDrawableItemRectangles<IDlcInfo>
+	public class Rectangles(IDlcInfo item) : IDrawableItemRectangles<IDlcInfo>
 	{
 		public Rectangle IncludedRect;
 		public Rectangle IconRect;
 		public Rectangle TextRect;
 		public Rectangle CenterRect;
 
-		public IDlcInfo Item { get; set; }
+        public IDlcInfo Item { get; set; } = item;
 
-		public Rectangles(IDlcInfo item)
-		{
-			Item = item;
-		}
-
-		public bool GetToolTip(Control instance, Point location, out string text, out Point point)
+        public bool GetToolTip(Control instance, Point location, out string text, out Point point)
 		{
 			if (IncludedRect.Contains(location) && ServiceCenter.Get<IDlcManager>().IsAvailable(Item.Id))
 			{

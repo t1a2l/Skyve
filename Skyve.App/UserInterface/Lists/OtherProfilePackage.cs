@@ -217,21 +217,16 @@ public class OtherProfilePackage : SlickStackedListControl<ICustomPlayset, Other
 		return rects;
 	}
 
-	public class Rectangles : IDrawableItemRectangles<ICustomPlayset>
+	public class Rectangles(ICustomPlayset item) : IDrawableItemRectangles<ICustomPlayset>
 	{
 		public Rectangle IncludedRect;
 		public Rectangle IconRect;
 		public Rectangle LoadRect;
 		public Rectangle TextRect;
 
-		public ICustomPlayset Item { get; set; }
+        public ICustomPlayset Item { get; set; } = item;
 
-		public Rectangles(ICustomPlayset item)
-		{
-			Item = item;
-		}
-
-		public bool GetToolTip(Control instance, Point location, out string text, out Point point)
+        public bool GetToolTip(Control instance, Point location, out string text, out Point point)
 		{
 			text = string.Empty;
 			point = default;

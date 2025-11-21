@@ -9,9 +9,9 @@ namespace Skyve.App.UserInterface.CompatibilityReport;
 
 public class CompatibilityMessageControl : SlickControl
 {
-	private readonly List<ulong> _subscribingTo = new();
-	private readonly Dictionary<IPackage, Rectangle> _buttonRects = new();
-	private readonly Dictionary<IPackage, Rectangle> _modRects = new();
+	private readonly List<ulong> _subscribingTo = [];
+	private readonly Dictionary<IPackage, Rectangle> _buttonRects = [];
+	private readonly Dictionary<IPackage, Rectangle> _modRects = [];
 	private Rectangle allButtonRect;
 	private Rectangle snoozeRect;
 
@@ -365,7 +365,7 @@ public class CompatibilityMessageControl : SlickControl
 					_compatibilityManager.ToggleSnoozed(Message);
 					break;
 				case StatusAction.UnsubscribeThis:
-					_subscriptionsManager.UnSubscribe(new[] { PackageCompatibilityReportControl.Package });
+					_subscriptionsManager.UnSubscribe([PackageCompatibilityReportControl.Package]);
 					break;
 				case StatusAction.UnsubscribeOther:
 					_subscriptionsManager.UnSubscribe(Message.Packages);
@@ -427,7 +427,7 @@ public class CompatibilityMessageControl : SlickControl
 
 			Loading = true;
 
-			_subscriptionsManager.Subscribe(new[] { item });
+			_subscriptionsManager.Subscribe([item]);
 		}
 		else
 		{

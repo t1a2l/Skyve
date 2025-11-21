@@ -10,7 +10,7 @@ public class DlcDropDown : SlickMultiSelectionDropDown<IDlcInfo>
 
 		if (Live)
 		{
-			Items = ServiceCenter.Get<IDlcManager>().Dlcs.ToArray();
+			Items = [.. ServiceCenter.Get<IDlcManager>().Dlcs];
 		}
 	}
 

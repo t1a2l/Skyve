@@ -49,7 +49,7 @@ public partial class PC_Options : PanelContent
 
 		folderPathsChanged = false;
 
-		DD_Language.Items = LocaleHelper.GetAvailableLanguages().Distinct().ToArray();
+		DD_Language.Items = [.. LocaleHelper.GetAvailableLanguages().Distinct()];
 		DD_Language.SelectedItem = DD_Language.Items.FirstOrDefault(x => x == LocaleHelper.CurrentCulture.IetfLanguageTag) ?? DD_Language.Items[0];
 		DD_Language.SelectedItemChanged += DD_Language_SelectedItemChanged;
 
@@ -243,7 +243,7 @@ public partial class PC_Options : PanelContent
 		Form.PushPanel(ServiceCenter.Get<IAppInterfaceService>().ChangelogPanel());
 	}
 
-	private void slickScroll1_Scroll(object sender, ScrollEventArgs e)
+	private void SlickScroll1_Scroll(object sender, ScrollEventArgs e)
 	{
 		slickSpacer3.Visible = slickScroll1.Percentage != 0;
 	}

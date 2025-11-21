@@ -96,7 +96,7 @@ partial class PC_HelpAndLogs
 			this.slickScroll1.TabIndex = 17;
 			this.slickScroll1.TabStop = false;
 			this.slickScroll1.Text = "slickScroll1";
-			this.slickScroll1.Scroll += new System.Windows.Forms.ScrollEventHandler(this.slickScroll1_Scroll);
+			this.slickScroll1.Scroll += new System.Windows.Forms.ScrollEventHandler(this.SlickScroll1_Scroll);
 			// 
 			// TLP_Main
 			// 

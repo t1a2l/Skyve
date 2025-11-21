@@ -17,9 +17,9 @@ namespace Skyve.Systems;
 
 internal class ImageSystem : IImageService
 {
-	private readonly Dictionary<string, object> _lockObjects = new();
+	private readonly Dictionary<string, object> _lockObjects = [];
 	private readonly System.Timers.Timer _cacheClearTimer;
-	private readonly Dictionary<string, (Bitmap image, DateTime lastAccessed)> _cache = new();
+	private readonly Dictionary<string, (Bitmap image, DateTime lastAccessed)> _cache = [];
 	private readonly TimeSpan _expirationTime = TimeSpan.FromMinutes(1);
 	private readonly HttpClient _httpClient = new();
 	private readonly ImageProcessor _imageProcessor;

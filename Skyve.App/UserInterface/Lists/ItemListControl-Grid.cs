@@ -161,8 +161,8 @@ public partial class ItemListControl<T>
 
 		lineBrush.InterpolationColors = new ColorBlend
 		{
-			Colors = new[] { Color.Empty, FormDesign.Design.AccentColor, FormDesign.Design.AccentColor, Color.Empty, Color.Empty },
-			Positions = new[] { 0.0f, 0.15f, 0.6f, 0.75f, 1f }
+			Colors = [Color.Empty, FormDesign.Design.AccentColor, FormDesign.Design.AccentColor, Color.Empty, Color.Empty],
+			Positions = [0.0f, 0.15f, 0.6f, 0.75f, 1f]
 		};
 
 		e.Graphics.FillRectangle(lineBrush, lineRect);
@@ -218,7 +218,7 @@ public partial class ItemListControl<T>
 
 			SlickButton.DrawButton(e, rect, string.Empty, Font, icon, null, rect.Contains(CursorLocation) ? e.HoverState | (isPressed ? HoverState.Pressed : 0) : HoverState.Normal, backColor: backColor);
 
-			e.Rects.SteamRect = rect;
+            e.Rects.SteamRect = rect;
 
 			rect.X -= rect.Width + padding.Left;
 		}
@@ -229,7 +229,7 @@ public partial class ItemListControl<T>
 
 			SlickButton.DrawButton(e, rect, string.Empty, Font, icon, null, rect.Contains(CursorLocation) ? e.HoverState | (isPressed ? HoverState.Pressed : 0) : HoverState.Normal, backColor: backColor);
 
-			e.Rects.GithubRect = rect;
+            e.Rects.GithubRect = rect;
 
 			rect.X -= rect.Width + padding.Left;
 		}

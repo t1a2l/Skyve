@@ -21,9 +21,9 @@ public partial class ContentList<T> : SlickControl where T : IPackage
 	private readonly IncludeAllButton<T> I_Actions;
 	protected int UsageFilteredOut;
 	private bool searchEmpty = true;
-	private readonly List<string> searchTermsOr = new();
-	private readonly List<string> searchTermsAnd = new();
-	private readonly List<string> searchTermsExclude = new();
+	private readonly List<string> searchTermsOr = [];
+	private readonly List<string> searchTermsAnd = [];
+	private readonly List<string> searchTermsExclude = [];
 
 	private readonly ISettings _settings;
 	private readonly INotifier _notifier;
@@ -67,7 +67,7 @@ public partial class ContentList<T> : SlickControl where T : IPackage
 
 		DD_Sorting.SkyvePage = Page;
 
-		I_Actions = new IncludeAllButton<T>(() => ListControl.FilteredItems.ToList());
+		I_Actions = new IncludeAllButton<T>(() => [.. ListControl.FilteredItems]);
 		I_Actions.ActionClicked += I_Actions_Click;
 		I_Actions.IncludeAllClicked += IncludeAll;
 		I_Actions.ExcludeAllClicked += ExcludeAll;
@@ -141,7 +141,7 @@ public partial class ContentList<T> : SlickControl where T : IPackage
 		var items = new List<T>(ListControl.Items);
 
 		DD_Author.SetItems(items);
-		DD_Tags.Items = _tagUtil.GetDistinctTags().ToArray();
+		DD_Tags.Items = [.. _tagUtil.GetDistinctTags()];
 	}
 
 	private void LC_Items_OpenWorkshopSearch()

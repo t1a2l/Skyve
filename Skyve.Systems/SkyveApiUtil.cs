@@ -8,26 +8,21 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Skyve.Systems;
-public class SkyveApiUtil
+public class SkyveApiUtil(IUserService userService)
 {
-	private readonly IUserService _userService;
+	private readonly IUserService _userService = userService;
 
-	public SkyveApiUtil(IUserService userService)
-	{
-		_userService = userService;
-	}
-
-	public async Task<T?> Get<T>(string url, params (string, object)[] queryParams)
+    public async Task<T?> Get<T>(string url, params (string, object)[] queryParams)
 	{
 		return await ApiUtil.Get<T>(KEYS.API_URL + url
-			, new[] { ("API_KEY", KEYS.API_KEY), ("USER_ID", Encryption.Encrypt(_userService.User.Id?.ToString() ?? string.Empty, KEYS.SALT)) }
+			, [("API_KEY", KEYS.API_KEY), ("USER_ID", Encryption.Encrypt(_userService.User.Id?.ToString() ?? string.Empty, KEYS.SALT))]
 			, queryParams);
 	}
 
 	public async Task<T?> Delete<T>(string url, params (string, object)[] queryParams)
 	{
 		return await ApiUtil.Delete<T>(KEYS.API_URL + url
-			, new[] { ("API_KEY", KEYS.API_KEY), ("USER_ID", Encryption.Encrypt(_userService.User.Id?.ToString() ?? string.Empty, KEYS.SALT)) }
+			, [("API_KEY", KEYS.API_KEY), ("USER_ID", Encryption.Encrypt(_userService.User.Id?.ToString() ?? string.Empty, KEYS.SALT))]
 			, queryParams);
 	}
 
@@ -35,7 +30,7 @@ public class SkyveApiUtil
 	{
 		return await ApiUtil.Post<TBody, T>(KEYS.API_URL + url
 			, body
-			, new[] { ("API_KEY", KEYS.API_KEY), ("USER_ID", Encryption.Encrypt(_userService.User.Id?.ToString() ?? string.Empty, KEYS.SALT)) }
+			, [("API_KEY", KEYS.API_KEY), ("USER_ID", Encryption.Encrypt(_userService.User.Id?.ToString() ?? string.Empty, KEYS.SALT))]
 			, queryParams);
 	}
 

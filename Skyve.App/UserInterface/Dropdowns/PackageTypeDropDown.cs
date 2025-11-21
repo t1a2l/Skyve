@@ -12,7 +12,7 @@ public class PackageTypeDropDown : SlickSelectionDropDown<PackageType>
 
 		if (Live)
 		{
-			Items = Enum.GetValues(typeof(PackageType)).Cast<PackageType>().ToArray();
+			Items = [.. Enum.GetValues(typeof(PackageType)).Cast<PackageType>()];
 		}
 	}
 

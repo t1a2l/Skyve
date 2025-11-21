@@ -10,7 +10,7 @@ public class PackageStatusDropDown : SlickSelectionDropDown<DownloadStatusFilter
 
 		if (Live)
 		{
-			Items = Enum.GetValues(typeof(DownloadStatusFilter)).Cast<DownloadStatusFilter>().ToArray();
+			Items = [.. Enum.GetValues(typeof(DownloadStatusFilter)).Cast<DownloadStatusFilter>()];
 		}
 	}
 

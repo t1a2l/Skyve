@@ -645,7 +645,7 @@ partial class PC_CompatibilityManagement
 			this.packageCrList.SeparateWithLines = true;
 			this.packageCrList.Size = new System.Drawing.Size(194, 550);
 			this.packageCrList.TabIndex = 0;
-			this.packageCrList.ItemMouseClick += new System.EventHandler<System.Windows.Forms.MouseEventArgs>(this.packageCrList1_ItemMouseClick);
+			this.packageCrList.ItemMouseClick += new System.EventHandler<System.Windows.Forms.MouseEventArgs>(this.PackageCrList1_ItemMouseClick);
 			// 
 			// TB_Search
 			// 

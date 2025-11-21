@@ -78,7 +78,7 @@ public partial class PC_PackagePage : PanelContent
 
 		if (crAvailable)
 		{
-			foreach (var item in crdata?.Links ?? new())
+			foreach (var item in crdata?.Links ?? [])
 			{
 				FLP_Links.Controls.Add(new LinkControl(item, true));
 			}
@@ -129,7 +129,7 @@ public partial class PC_PackagePage : PanelContent
 		T_Profiles.FillTab = true;
 		T_Profiles.LinkedControl = pc;
 
-		slickTabControl1.Tabs = tabs.ToArray();
+		slickTabControl1.Tabs = [.. tabs];
 
 		_notifier.PackageInformationUpdated += CentralManager_PackageInformationUpdated;
 	}
@@ -198,7 +198,7 @@ public partial class PC_PackagePage : PanelContent
 			return;
 		}
 
-		var frm = EditTags(new[] { Package.LocalPackage });
+		var frm = EditTags([Package.LocalPackage]);
 
 		frm.FormClosed += (_, _) =>
 		{

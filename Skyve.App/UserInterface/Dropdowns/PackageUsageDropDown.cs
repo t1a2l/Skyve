@@ -12,7 +12,7 @@ public class PackageUsageDropDown : SlickMultiSelectionDropDown<PackageUsage>
 
 		if (Live)
 		{
-			Items = Enum.GetValues(typeof(PackageUsage)).Cast<PackageUsage>().ToArray();
+			Items = [.. Enum.GetValues(typeof(PackageUsage)).Cast<PackageUsage>()];
 			SelectedItems = Items;
 		}
 	}

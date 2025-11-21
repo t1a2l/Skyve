@@ -98,11 +98,11 @@ public class PackageCrList : SlickStackedListControl<ulong, PackageCrList.Rectan
 		}
 	}
 
-	public class Rectangles : IDrawableItemRectangles<ulong>
+    public class Rectangles : IDrawableItemRectangles<ulong>
 	{
 		public ulong Item { get; set; }
 
-		public bool GetToolTip(Control instance, Point location, out string text, out Point point)
+        public bool GetToolTip(Control instance, Point location, out string text, out Point point)
 		{
 			text = string.Empty;
 			point = default;

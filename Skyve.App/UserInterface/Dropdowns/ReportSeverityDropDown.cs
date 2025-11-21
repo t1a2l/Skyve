@@ -33,7 +33,7 @@ public class ReportSeverityDropDown : SlickSelectionDropDown<CompatibilityNotifi
 
 		if (Live)
 		{
-			Items = Enum.GetValues(typeof(CompatibilityNotificationFilter)).Cast<CompatibilityNotificationFilter>().ToArray();
+			Items = [.. Enum.GetValues(typeof(CompatibilityNotificationFilter)).Cast<CompatibilityNotificationFilter>()];
 
 			selectedItem = CompatibilityNotificationFilter.Any;
 		}

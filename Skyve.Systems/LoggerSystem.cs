@@ -9,6 +9,7 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
+using static System.Environment;
 
 namespace Skyve.Systems;
 
@@ -23,7 +24,7 @@ public class LoggerSystem : ILogger
 
 	public LoggerSystem(ISettings _)
 	{
-		var folder = CrossIO.Combine(ISave.CustomSaveDirectory, ISave.AppName, "Logs");
+		var folder = CrossIO.Combine(GetFolderPath(SpecialFolder.LocalApplicationData), ISave.AppName, "Logs");
 
 		PreviousLogFilePath = CrossIO.Combine(folder, $"SkyveApp_Previous.log");
 		LogFilePath = CrossIO.Combine(folder, $"SkyveApp.log");
@@ -44,7 +45,7 @@ public class LoggerSystem : ILogger
 				File.Move(LogFilePath, PreviousLogFilePath);
 			}
 
-			File.WriteAllBytes(LogFilePath, new byte[0]);
+			File.WriteAllBytes(LogFilePath, []);
 
 			_stopwatch = Stopwatch.StartNew();
 

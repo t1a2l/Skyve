@@ -21,7 +21,7 @@ public static class ApiUtil
 
 	public static async Task<T?> Get<T>(string url, params (string, object)[] queryParams)
 	{
-		return await Get<T>(url, new (string, string)[0], queryParams);
+		return await Get<T>(url, [], queryParams);
 	}
 
 	public static async Task<T?> Get<T>(string url, (string, string)[] headers, params (string, object)[] queryParams)
@@ -31,7 +31,7 @@ public static class ApiUtil
 
 	public static async Task<T?> Delete<T>(string url, params (string, object)[] queryParams)
 	{
-		return await Delete<T>(url, new (string, string)[0], queryParams);
+		return await Delete<T>(url, [], queryParams);
 	}
 
 	public static async Task<T?> Delete<T>(string url, (string, string)[] headers, params (string, object)[] queryParams)
@@ -102,7 +102,7 @@ public static class ApiUtil
 
 	public static async Task<T?> Post<TBody, T>(string url, TBody body, params (string, object)[] queryParams)
 	{
-		return await Post<TBody, T>(url, body, new (string, string)[0], queryParams);
+		return await Post<TBody, T>(url, body, [], queryParams);
 	}
 
 	public static async Task<T?> Post<TBody, T>(string baseUrl, TBody body, (string, string)[] headers, params (string, object)[] queryParams)

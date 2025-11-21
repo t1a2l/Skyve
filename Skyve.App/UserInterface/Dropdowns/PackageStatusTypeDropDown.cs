@@ -4,22 +4,17 @@ using System.Windows.Forms;
 
 namespace Skyve.App.UserInterface.Dropdowns;
 
-public class PackageStatusTypeDropDown<T> : SlickSelectionDropDown<T> where T : struct, Enum
+public class PackageStatusTypeDropDown<T>(bool restricted) : SlickSelectionDropDown<T> where T : struct, Enum
 {
-	private readonly bool _restricted;
+	private readonly bool _restricted = restricted;
 
-	public PackageStatusTypeDropDown(bool restricted)
-	{
-		_restricted = restricted;
-	}
-
-	protected override void OnHandleCreated(EventArgs e)
+    protected override void OnHandleCreated(EventArgs e)
 	{
 		base.OnHandleCreated(e);
 
 		if (Live)
 		{
-			Items = Enum.GetValues(typeof(T)).Cast<T>().Where(x => CRNAttribute.GetAttribute(x).Browsable && (!_restricted || CRNAttribute.GetAttribute(x).AllowedChange != CRNAttribute.ChangeType.Deny)).ToArray();
+			Items = [.. Enum.GetValues(typeof(T)).Cast<T>().Where(x => CRNAttribute.GetAttribute(x).Browsable && (!_restricted || CRNAttribute.GetAttribute(x).AllowedChange != CRNAttribute.ChangeType.Deny))];
 		}
 	}
 

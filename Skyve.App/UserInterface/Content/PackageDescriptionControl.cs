@@ -10,14 +10,12 @@ using System.Windows.Forms;
 namespace Skyve.App.UserInterface.Content;
 public class PackageDescriptionControl : SlickImageControl
 {
-#pragma warning disable IDE1006
 #pragma warning disable CS0649
 	private Padding GridPadding;
 	private readonly bool GridView;
 	private readonly bool CompactList;
 	private readonly bool IsPackagePage;
 #pragma warning restore CS0649
-#pragma warning restore IDE1006
 
 	public IPackage? Package { get; private set; }
 	public PC_PackagePage? PackagePage { get; private set; }
@@ -76,7 +74,7 @@ public class PackageDescriptionControl : SlickImageControl
 			{
 				if (!item.Item.IsLocal)
 				{
-					_subscriptionsManager.Subscribe(new IPackage[] { item.Item });
+					_subscriptionsManager.Subscribe([item.Item]);
 				}
 
 				return;
@@ -611,7 +609,7 @@ public class PackageDescriptionControl : SlickImageControl
 			e.Rects.CompatibilityRect = e.Graphics.DrawLargeLabel(
 				point,
 				LocaleCR.Get($"{notificationType}"),
-				"I_CompatibilityReport",
+                "I_CompatibilityReport",
 				notificationType.Value.GetColor(),
 				CompactList ? ContentAlignment.TopLeft : ContentAlignment.TopRight,
 				Padding,
@@ -675,9 +673,9 @@ public class PackageDescriptionControl : SlickImageControl
 		return rects;
 	}
 
-	public class Rectangles : IDrawableItemRectangles<IPackage>
+	public class Rectangles(IPackage item) : IDrawableItemRectangles<IPackage>
 	{
-		public Dictionary<ITag, Rectangle> TagRects = new();
+		public Dictionary<ITag, Rectangle> TagRects = [];
 		public Rectangle IncludedRect;
 		public Rectangle EnabledRect;
 		public Rectangle FolderRect;
@@ -697,14 +695,9 @@ public class PackageDescriptionControl : SlickImageControl
 		public Rectangle BotRect;
 		public Rectangle MoreRect;
 
-		public IPackage Item { get; set; }
+        public IPackage Item { get; set; } = item;
 
-		public Rectangles(IPackage item)
-		{
-			Item = item;
-		}
-
-		public bool IsHovered(Control instance, Point location)
+        public bool IsHovered(Control instance, Point location)
 		{
 			return
 				IncludedRect.Contains(location) ||
@@ -852,7 +845,7 @@ public class PackageDescriptionControl : SlickImageControl
 				}
 			}
 
-			if (VersionRect.Contains(location) && Item.LocalParentPackage?.Mod is IMod mod)
+            if (VersionRect.Contains(location) && Item.LocalParentPackage?.Mod is not null)
 			{
 				text = Locale.CopyVersionNumber;
 				point = VersionRect.Location;

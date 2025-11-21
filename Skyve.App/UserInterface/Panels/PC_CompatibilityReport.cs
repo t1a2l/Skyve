@@ -1,9 +1,7 @@
 ﻿using Newtonsoft.Json;
 
 using Skyve.App.UserInterface.Generic;
-using Skyve.Domain.Systems;
 using Skyve.Systems.Compatibility.Domain;
-using Skyve.Systems.Compatibility.Domain.Api;
 
 using System.Drawing;
 using System.IO;
@@ -11,8 +9,6 @@ using System.IO.Compression;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Skyve.App.UserInterface.Panels;
 public partial class PC_CompatibilityReport : PanelContent
@@ -90,7 +86,7 @@ public partial class PC_CompatibilityReport : PanelContent
 
 	protected void RefreshAuthorAndTags()
 	{
-		DD_Tags.Items = _tagUtil.GetDistinctTags().ToArray();
+		DD_Tags.Items = [.. _tagUtil.GetDistinctTags()];
 	}
 
 	protected override void DesignChanged(FormDesign design)
@@ -222,7 +218,7 @@ public partial class PC_CompatibilityReport : PanelContent
 			,
 			StatusAction.UnsubscribeThis => () =>
 			{
-				_subscriptionsManager.UnSubscribe(new[] { report.Package! });
+				_subscriptionsManager.UnSubscribe([report.Package!]);
 				_compatibilityManager.QuickUpdate(message);
 			}
 			,
@@ -402,7 +398,7 @@ public partial class PC_CompatibilityReport : PanelContent
 
 	private async void ApplyAll()
 	{
-		await Task.Run(() => Parallelism.ForEach(ListControl.FilteredItems.SelectWhereNotNull(GetAction).ToList(), 4));
+		await Task.Run(() => Parallelism.ForEach([.. ListControl.FilteredItems.SelectWhereNotNull(GetAction)], 4));
 		ListControl.DoFilterChanged();
 	}
 
@@ -820,6 +816,6 @@ public partial class PC_CompatibilityReport : PanelContent
 		settings.DescendingSort = ListControl.SortDescending;
 		_settings.SessionSettings.Save();
 
-		I_SortOrder.ImageName = ListControl.SortDescending ? "I_SortDesc" : "I_SortAsc";
+		I_SortOrder.ImageName = ListControl.SortDescending ? "SortDesc" : "SortAsc";
 	}
 }

@@ -298,7 +298,7 @@ public class PlaysetListControl : SlickStackedListControl<ICustomPlayset, Playse
 				packages = item.Packages;
 			}
 
-			Program.MainForm.PushPanel(new PC_GenericPackageList(packages ?? Enumerable.Empty<IPackage>(), true)
+			Program.MainForm.PushPanel(new PC_GenericPackageList(packages ?? [], true)
 			{
 				Text = item.Name
 			});
@@ -624,16 +624,11 @@ public class PlaysetListControl : SlickStackedListControl<ICustomPlayset, Playse
 		return rects;
 	}
 
-	public class Rectangles : IDrawableItemRectangles<ICustomPlayset>
+	public class Rectangles(ICustomPlayset item) : IDrawableItemRectangles<ICustomPlayset>
 	{
-		public ICustomPlayset Item { get; set; }
+        public ICustomPlayset Item { get; set; } = item;
 
-		public Rectangles(ICustomPlayset item)
-		{
-			Item = item;
-		}
-
-		public Rectangle Thumbnail;
+        public Rectangle Thumbnail;
 		public Rectangle Favorite;
 		public Rectangle Icon;
 		public Rectangle Folder;

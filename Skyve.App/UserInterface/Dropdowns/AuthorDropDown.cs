@@ -4,7 +4,7 @@ using System.Windows.Forms;
 namespace Skyve.App.UserInterface.Dropdowns;
 public class AuthorDropDown : SlickMultiSelectionDropDown<IUser>
 {
-	private readonly Dictionary<IUser, int> _counts = new();
+	private readonly Dictionary<IUser, int> _counts = [];
 	private readonly IImageService _imageManager;
 	private readonly ICompatibilityManager _compatibilityManager;
 
@@ -28,7 +28,7 @@ public class AuthorDropDown : SlickMultiSelectionDropDown<IUser>
 			}
 		}
 
-		Items = _counts.Keys.ToArray();
+		Items = [.. _counts.Keys];
 	}
 
 	protected override IEnumerable<IUser> OrderItems(IEnumerable<IUser> items)

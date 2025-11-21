@@ -52,7 +52,7 @@ public partial class PC_ReviewSingleRequest : PanelContent
 				Action = (StatusAction)request.StatusAction,
 				IntType = request.StatusType,
 				Note = request.StatusNote,
-				Packages = request.StatusPackages?.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(ulong.Parse).ToArray(),
+				Packages = request.StatusPackages?.Split([','], StringSplitOptions.RemoveEmptyEntries).Select(ulong.Parse).ToArray(),
 			})
 			{ BackColor = FormDesign.Design.AccentBackColor }, 0, 4);
 		}
@@ -63,7 +63,7 @@ public partial class PC_ReviewSingleRequest : PanelContent
 				Action = (StatusAction)request.StatusAction,
 				IntType = request.StatusType,
 				Note = request.StatusNote,
-				Packages = request.StatusPackages?.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(ulong.Parse).ToArray(),
+				Packages = request.StatusPackages?.Split([','], StringSplitOptions.RemoveEmptyEntries).Select(ulong.Parse).ToArray(),
 			})
 			{ BackColor = FormDesign.Design.AccentBackColor }, 0, 4);
 		}
@@ -173,7 +173,7 @@ public partial class PC_ReviewSingleRequest : PanelContent
 
 	private void B_ManagePackage_Click(object sender, EventArgs e)
 	{
-		Form.PushPanel(new PC_CompatibilityManagement(new[] { _request.PackageId }));
+		Form.PushPanel(new PC_CompatibilityManagement([_request.PackageId]));
 	}
 
 	private void B_ApplyChanges_Click(object sender, EventArgs e)
@@ -199,7 +199,7 @@ public partial class PC_ReviewSingleRequest : PanelContent
 		B_DeleteRequest.Loading = false;
 	}
 
-	private void slickIcon1_Click(object sender, EventArgs e)
+	private void SlickIcon1_Click(object sender, EventArgs e)
 	{
 		Clipboard.SetText(label2.Text);
 	}

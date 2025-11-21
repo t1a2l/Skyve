@@ -1,13 +1,10 @@
 ﻿using Skyve.App.Interfaces;
 using Skyve.App.UserInterface.Panels;
 
-using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
 using System.Windows.Forms;
-
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Skyve.App.UserInterface.Lists;
 public class CompatibilityReportList : SlickStackedListControl<ICompatibilityInfo, CompatibilityReportList.Rectangles>
@@ -21,16 +18,14 @@ public class CompatibilityReportList : SlickStackedListControl<ICompatibilityInf
 	private readonly IModLogicManager _modLogicManager;
 	private readonly IModUtil _modUtil;
 
-#pragma warning disable IDE1006
 #pragma warning disable CS0649
-	private readonly bool CompactList;
+    private readonly bool CompactList;
 	private readonly bool IsPackagePage;
 #pragma warning restore CS0649
-#pragma warning restore IDE1006
 
 	private PackageSorting sorting;
 	private bool headerHovered;
-	private readonly Dictionary<NotificationType, Rectangle> _headerRects = new();
+	private readonly Dictionary<NotificationType, Rectangle> _headerRects = [];
 
 	public bool SortDescending { get; private set; }
 	public NotificationType CurrentGroup { get; private set; }
@@ -45,15 +40,21 @@ public class CompatibilityReportList : SlickStackedListControl<ICompatibilityInf
 		AllowDrop = true;
 
 		ServiceCenter.Get(out _subscriptionsManager, out _compatibilityManager, out _packageUtil, out _dlcManager, out _bulkUtil, out _settings, out _modUtil, out _modLogicManager);
-
-		if (_settings is not null && _settings.UserSettings.PageSettings.ContainsKey(SkyvePage.CompatibilityReport))
-		{
-			sorting = (PackageSorting)_settings.UserSettings.PageSettings[SkyvePage.CompatibilityReport].Sorting;
-			SortDescending = _settings.UserSettings.PageSettings[SkyvePage.CompatibilityReport].DescendingSort;
-		}
 	}
 
-	protected override void UIChanged()
+    protected override void OnCreateControl()
+    {
+        base.OnCreateControl();
+
+        if (Live && _settings.UserSettings.PageSettings.ContainsKey(SkyvePage.CompatibilityReport))
+        {
+            sorting = (PackageSorting)_settings.UserSettings.PageSettings[SkyvePage.CompatibilityReport].Sorting;
+            SortDescending = _settings.UserSettings.PageSettings[SkyvePage.CompatibilityReport].DescendingSort;
+        }
+    }
+
+
+    protected override void UIChanged()
 	{
 		GridItemSize = new Size(380, 380);
 
@@ -668,8 +669,8 @@ public class CompatibilityReportList : SlickStackedListControl<ICompatibilityInf
 
 		lineBrush.InterpolationColors = new ColorBlend
 		{
-			Colors = new[] { Color.Empty, FormDesign.Design.AccentColor, FormDesign.Design.AccentColor, Color.Empty },
-			Positions = new[] { 0.0f, 0.2f, 0.8f, 1f }
+			Colors = [Color.Empty, FormDesign.Design.AccentColor, FormDesign.Design.AccentColor, Color.Empty],
+			Positions = [0.0f, 0.2f, 0.8f, 1f]
 		};
 
 		e.Graphics.FillRectangle(lineBrush, lineRect);
@@ -882,7 +883,7 @@ public class CompatibilityReportList : SlickStackedListControl<ICompatibilityInf
 			{
 				if (!item.Item.Package!.IsLocal)
 				{
-					_subscriptionsManager.Subscribe(new IPackage[] { item.Item.Package! });
+					_subscriptionsManager.Subscribe([item.Item.Package!]);
 				}
 
 				return;
@@ -1046,7 +1047,7 @@ public class CompatibilityReportList : SlickStackedListControl<ICompatibilityInf
 					FilterChanged();
 					break;
 				case StatusAction.UnsubscribeThis:
-					_subscriptionsManager.UnSubscribe(new[] { item.Item.Package! });
+					_subscriptionsManager.UnSubscribe([item.Item.Package!]);
 					break;
 				case StatusAction.UnsubscribeOther:
 					_subscriptionsManager.UnSubscribe(Message.Packages!);
@@ -1116,7 +1117,7 @@ public class CompatibilityReportList : SlickStackedListControl<ICompatibilityInf
 
 			Loading = true;
 
-			_subscriptionsManager.Subscribe(new[] { item });
+			_subscriptionsManager.Subscribe([item]);
 		}
 		else
 		{
@@ -1266,7 +1267,7 @@ public class CompatibilityReportList : SlickStackedListControl<ICompatibilityInf
 		}
 	}
 
-	public class Rectangles : IDrawableItemRectangles<ICompatibilityInfo>
+	public class Rectangles(ICompatibilityInfo item) : IDrawableItemRectangles<ICompatibilityInfo>
 	{
 		public Rectangle IncludedRect;
 		public Rectangle EnabledRect;
@@ -1278,22 +1279,17 @@ public class CompatibilityReportList : SlickStackedListControl<ICompatibilityInf
 		public Rectangle AuthorRect;
 		public Rectangle VersionRect;
 		public Rectangle DateRect;
-		public Dictionary<IPackageIdentity, Rectangle> buttonRects = new();
-		public Dictionary<IPackageIdentity, Rectangle> modRects = new();
+		public Dictionary<IPackageIdentity, Rectangle> buttonRects = [];
+		public Dictionary<IPackageIdentity, Rectangle> modRects = [];
 		public Rectangle SteamIdRect;
 		public Rectangle SnoozeRect;
 		public Rectangle AllButtonRect;
 		public Rectangle CompatibilityRect;
 
-		public ICompatibilityInfo Item { get; set; }
-		public Rectangle FolderNameRect { get; set; }
+        public ICompatibilityInfo Item { get; set; } = item;
+        public Rectangle FolderNameRect { get; set; }
 
-		public Rectangles(ICompatibilityInfo item)
-		{
-			Item = item;
-		}
-
-		public bool GetToolTip(Control instance, Point location, out string text, out Point point)
+        public bool GetToolTip(Control instance, Point location, out string text, out Point point)
 		{
 			if (IncludedRect.Contains(location))
 			{
@@ -1384,7 +1380,7 @@ public class CompatibilityReportList : SlickStackedListControl<ICompatibilityInf
 				return true;
 			}
 
-			if (VersionRect.Contains(location) && Item.Package?.LocalParentPackage?.Mod is IMod mod)
+            if (VersionRect.Contains(location) && Item.Package?.LocalParentPackage?.Mod is not null)
 			{
 				text = Locale.CopyVersionNumber;
 				point = VersionRect.Location;

@@ -17,17 +17,17 @@ public class ReviewRequestList : SlickStackedListControl<ReviewRequest, ReviewRe
 		DynamicSizing = true;
 		ItemHeight = 64;
 
-		_notifier.WorkshopUsersInfoLoaded += _notifier_WorkshopUsersInfoLoaded;
+		_notifier.WorkshopUsersInfoLoaded += Notifier_WorkshopUsersInfoLoaded;
 	}
 
 	protected override void Dispose(bool disposing)
 	{
-		_notifier.WorkshopUsersInfoLoaded -= _notifier_WorkshopUsersInfoLoaded;
+		_notifier.WorkshopUsersInfoLoaded -= Notifier_WorkshopUsersInfoLoaded;
 
 		base.Dispose(disposing);
 	}
 
-	private void _notifier_WorkshopUsersInfoLoaded()
+	private void Notifier_WorkshopUsersInfoLoaded()
 	{
 		Invalidate();
 	}
@@ -93,7 +93,7 @@ public class ReviewRequestList : SlickStackedListControl<ReviewRequest, ReviewRe
 		{
 			Text = LocaleCR.ViewRequest,
 			Icon = "I_Link"
-		}, e.ClipRectangle.Pad(Padding), ContentAlignment.TopRight, (e.HoverState, CursorLocation)).Rectangle;
+        }, e.ClipRectangle.Pad(Padding), ContentAlignment.TopRight, (e.HoverState, CursorLocation)).Rectangle;
 
 		if (image is not null)
 		{
@@ -126,7 +126,7 @@ public class ReviewRequestList : SlickStackedListControl<ReviewRequest, ReviewRe
 		e.Rects.TextRectangle = SlickButton.AlignAndDraw(e, new ButtonDrawArgs
 		{
 			Icon = "I_Copy"
-		}, e.ClipRectangle.Pad(0, e.Rects.ViewRectangle.Height + Padding.Vertical, Padding.Right, 0), ContentAlignment.MiddleRight, (e.HoverState, CursorLocation)).Rectangle;
+        }, e.ClipRectangle.Pad(0, e.Rects.ViewRectangle.Height + Padding.Vertical, Padding.Right, 0), ContentAlignment.MiddleRight, (e.HoverState, CursorLocation)).Rectangle;
 
 		using var smallfont = UI.Font(8.25F);
 		var noteRect = e.ClipRectangle.Pad((int)(125 * UI.FontScale), e.Rects.ViewRectangle.Height + Padding.Vertical, e.Rects.TextRectangle.Width + Padding.Horizontal, 0);
@@ -135,20 +135,15 @@ public class ReviewRequestList : SlickStackedListControl<ReviewRequest, ReviewRe
 		e.DrawableItem.CachedHeight = Math.Max(ItemHeight, noteRect.Top + Padding.Bottom + (int)e.Graphics.Measure(e.Item.PackageNote, smallfont, noteRect.Width).Height);
 	}
 
-	public class Rectangles : IDrawableItemRectangles<ReviewRequest>
+	public class Rectangles(ReviewRequest item) : IDrawableItemRectangles<ReviewRequest>
 	{
-		public ReviewRequest Item { get; set; }
+        public ReviewRequest Item { get; set; } = item;
 
-		public Rectangle UserRectangle;
+        public Rectangle UserRectangle;
 		public Rectangle TextRectangle;
 		public Rectangle ViewRectangle;
 
-		public Rectangles(ReviewRequest item)
-		{
-			Item = item;
-		}
-
-		public bool GetToolTip(Control instance, Point location, out string text, out Point point)
+        public bool GetToolTip(Control instance, Point location, out string text, out Point point)
 		{
 			text = string.Empty;
 			point = default;

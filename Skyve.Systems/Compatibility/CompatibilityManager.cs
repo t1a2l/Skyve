@@ -20,9 +20,9 @@ public class CompatibilityManager : ICompatibilityManager
 	private const string DATA_CACHE_FILE = "CompatibilityDataCache.json";
 	private const string SNOOZE_FILE = "CompatibilitySnoozed.json";
 
-	private readonly DelayedAction _delayedReportCache;
+    private readonly DelayedAction _delayedReportCache;
 	private readonly Dictionary<IPackage, CompatibilityInfo> _cache = new(new IPackageEqualityComparer());
-	private readonly List<SnoozedItem> _snoozedItems = new();
+	private readonly List<SnoozedItem> _snoozedItems = [];
 	private readonly Regex _bracketsRegex = new(@"[\[\(](.+?)[\]\)]", RegexOptions.Compiled);
 	private readonly Regex _urlRegex = new(@"(https?|ftp)://(?:www\.)?([\w-]+(?:\.[\w-]+)*)(?:/[^?\s]*)?(?:\?[^#\s]*)?(?:#.*)?", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
@@ -197,20 +197,20 @@ public class CompatibilityManager : ICompatibilityManager
 	{
 		try
 		{
-			var data = await _skyveApiUtil.Catalogue();
-
-			if (data is not null)
+            var data = await _skyveApiUtil.Catalogue();
+			 
+            if (data is not null)
 			{
-				ISave.Save(data, DATA_CACHE_FILE);
+                ISave.Save(data, DATA_CACHE_FILE);
 
-				CompatibilityData = new IndexedCompatibilityData(data);
+                CompatibilityData = new IndexedCompatibilityData(data);
 
-				_delayedReportCache.Run();
+                _delayedReportCache.Run();
 
-				_notifier.OnCompatibilityDataLoaded();
+                _notifier.OnCompatibilityDataLoaded();
 
 #if DEBUG
-				if (System.Diagnostics.Debugger.IsAttached)
+                if (System.Diagnostics.Debugger.IsAttached)
 				{
 					var dic = await _skyveApiUtil.Translations();
 
@@ -310,9 +310,9 @@ public class CompatibilityManager : ICompatibilityManager
 			SteamId = package.Id,
 			Name = package.Name,
 			FileName = package.LocalParentPackage?.Mod?.FilePath,
-			Links = new(),
-			Interactions = new(),
-			Statuses = new(),
+			Links = [],
+			Interactions = [],
+			Statuses = []
 		};
 
 		var workshopInfo = package.GetWorkshopInfo();

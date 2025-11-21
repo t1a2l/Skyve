@@ -11,12 +11,12 @@ internal class ImageProcessor : PeriodicProcessor<ImageProcessor.ImageRequest, I
 {
 	private readonly IImageService _imageManager;
 
-	public ImageProcessor(IImageService imageManager) : base(100, 500, null)
+	public ImageProcessor(IImageService imageManager) : base(100, 500, null) 
 	{
 		_imageManager = imageManager;
 	}
 
-	protected override bool CanProcess()
+    protected override bool CanProcess()
 	{
 		return ConnectionHandler.IsConnected;
 	}
@@ -32,25 +32,18 @@ internal class ImageProcessor : PeriodicProcessor<ImageProcessor.ImageRequest, I
 			}
 		}
 
-		return (new(), false);
+		return ([], false);
 	}
 
 	protected override void CacheItems(Dictionary<ImageRequest, TimeStampedImage> results)
 	{ }
 
-	internal readonly struct ImageRequest
-	{
-		public ImageRequest(string url, string? fileName, bool square)
-		{
-			Url = url;
-			FileName = fileName;
-			Square = square;
-		}
-
-		public string Url { get; }
-		public string? FileName { get; }
-		public bool Square { get; }
-	}
+	internal readonly struct ImageRequest(string url, string? fileName, bool square)
+    {
+        public string Url { get; } = url;
+        public string? FileName { get; } = fileName;
+        public bool Square { get; } = square;
+    }
 
 	internal readonly struct TimeStampedImage : ITimestamped
 	{

@@ -12,7 +12,7 @@ public class AssetsBubble : StatusBubbleBase
 
 	public AssetsBubble()
 	{
-		_compatibilityCounts = new();
+		_compatibilityCounts = [];
 
 		ServiceCenter.Get(out _notifier, out _contentUtil, out _contentManager);
 

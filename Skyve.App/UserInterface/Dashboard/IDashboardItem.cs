@@ -4,8 +4,8 @@ using System.Windows.Forms;
 namespace Skyve.App.UserInterface.Dashboard;
 public abstract class IDashboardItem : SlickImageControl
 {
-	protected readonly List<(Rectangle rectangle, int height)> _sections = new();
-	protected readonly Dictionary<Rectangle, ExtensionClass.action> _buttonActions = new();
+	protected readonly List<(Rectangle rectangle, int height)> _sections = [];
+	protected readonly Dictionary<Rectangle, ExtensionClass.action> _buttonActions = [];
 
 	public event EventHandler? ResizeRequested;
 
@@ -175,7 +175,7 @@ public abstract class IDashboardItem : SlickImageControl
 
 	protected void DrawSection(PaintEventArgs e, bool applyDrawing, Rectangle rectangle, string text, DynamicIcon dynamicIcon, out Color fore, ref int preferredHeight, Color? tintColor = null, string? subText = null, bool drawBackground = true)
 	{
-		var hoverState = rectangle.Contains(CursorLocation) ? (HoverState & ~HoverState.Focused) : HoverState.Normal;
+		//var hoverState = rectangle.Contains(CursorLocation) ? (HoverState & ~HoverState.Focused) : HoverState.Normal;
 
 		Color back;
 

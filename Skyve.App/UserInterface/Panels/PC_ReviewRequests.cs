@@ -16,7 +16,7 @@ public partial class PC_ReviewRequests : PanelContent
 	{
 		InitializeComponent();
 
-		_reviewRequests = reviewRequests.ToList();
+		_reviewRequests = [.. reviewRequests];
 
 		packageCrList.SetItems(reviewRequests.Select(x => x.PackageId).Distinct());
 		packageCrList.CanDrawItem += PackageCrList_CanDrawItem;

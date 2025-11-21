@@ -10,7 +10,7 @@ public class ProfileSortingDropDown : SlickSelectionDropDown<ProfileSorting>
 
 		if (Live)
 		{
-			Items = Enum.GetValues(typeof(ProfileSorting)).Cast<ProfileSorting>().Where(x => x != ProfileSorting.Downloads).ToArray();
+			Items = [.. Enum.GetValues(typeof(ProfileSorting)).Cast<ProfileSorting>().Where(x => x != ProfileSorting.Downloads)];
 
 			SelectedItem = (ProfileSorting)ServiceCenter.Get<ISettings>().UserSettings.PageSettings.GetOrAdd(SkyvePage.Profiles).Sorting;
 		}

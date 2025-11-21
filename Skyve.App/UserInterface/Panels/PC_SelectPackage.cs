@@ -14,9 +14,9 @@ public partial class PC_SelectPackage : PanelContent
 	private readonly DelayedAction<TicketBooth.Ticket> _delayedSearch;
 	private readonly TicketBooth _ticketBooth = new();
 	private bool searchEmpty = true;
-	private readonly List<string> searchTermsOr = new();
-	private readonly List<string> searchTermsAnd = new();
-	private readonly List<string> searchTermsExclude = new();
+	private readonly List<string> searchTermsOr = [];
+	private readonly List<string> searchTermsAnd = [];
+	private readonly List<string> searchTermsExclude = [];
 	public event Action<IEnumerable<ulong>>? PackageSelected;
 
 	private readonly IWorkshopService _workshopService = ServiceCenter.Get<IWorkshopService>();
@@ -222,15 +222,15 @@ public partial class PC_SelectPackage : PanelContent
 			}
 			else
 			{
-				items = new();
+				items = [];
 			}
 		}
 		else
 		{
 			items = (await _workshopService.QueryFilesAsync(PackageSorting.Default,
 				TB_Search.Text,
-				OT_ModAsset.SelectedValue == ThreeOptionToggle.Value.Option1 ? new[] { "Mod" } : null,
-			 	OT_ModAsset.SelectedValue == ThreeOptionToggle.Value.Option2 ? new[] { "Mod" } : null)).ToDictionary(x => x.Id);
+				OT_ModAsset.SelectedValue == ThreeOptionToggle.Value.Option1 ? ["Mod"] : null,
+			 	OT_ModAsset.SelectedValue == ThreeOptionToggle.Value.Option2 ? ["Mod"] : null)).ToDictionary(x => x.Id);
 		}
 
 		if (!_ticketBooth.IsLast(ticket))

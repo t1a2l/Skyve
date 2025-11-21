@@ -10,17 +10,12 @@ using System.Xml;
 using System.Xml.Serialization;
 
 namespace Skyve.Domain;
-public abstract class ConfigFile
+public abstract class ConfigFile(string filePath)
 {
 	protected bool AutoRefresh { get; set; }
-	protected string FilePath { get; }
+    protected string FilePath { get; } = filePath;
 
-	protected ConfigFile(string filePath)
-	{
-		FilePath = filePath;
-	}
-
-	protected void OnLoad() { }
+    protected void OnLoad() { }
 
 	public virtual void Save()
 	{
@@ -70,7 +65,7 @@ public abstract class ConfigFile
 
 	private void SerializeJson()
 	{
-		ISave.Write(FilePath, JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented), false);
+        ISave.Write(FilePath, JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented), false);
 	}
 
 	private static T DeserializeJson<T>(string filePath) where T : ConfigFile
@@ -82,8 +77,10 @@ public abstract class ConfigFile
 			throw new Exception("File contents empty");
 		}
 
-		return JsonConvert.DeserializeObject<T>(fileContents);
-	}
+#pragma warning disable CS8603 // Possible null reference return.
+        return JsonConvert.DeserializeObject<T>(fileContents);
+#pragma warning restore CS8603 // Possible null reference return.
+    }
 
 	private void SerializeXml()
 	{

@@ -98,7 +98,7 @@ partial class PC_ReviewSingleRequest
 			this.slickIcon1.Name = "slickIcon1";
 			this.slickIcon1.Size = new System.Drawing.Size(14, 15);
 			this.slickIcon1.TabIndex = 4;
-			this.slickIcon1.Click += new System.EventHandler(this.slickIcon1_Click);
+			this.slickIcon1.Click += new System.EventHandler(this.SlickIcon1_Click);
 			// 
 			// label1
 			// 

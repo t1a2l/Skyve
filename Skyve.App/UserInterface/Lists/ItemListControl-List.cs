@@ -52,7 +52,7 @@ public partial class ItemListControl<T>
 		e.Graphics.SetClip(new Rectangle(e.ClipRectangle.X, e.ClipRectangle.Y - Padding.Top + 1, e.ClipRectangle.Width, e.ClipRectangle.Height + Padding.Vertical - 2));
 
 		DrawTitleAndTagsAndVersionForList(e, localParentPackage, workshopInfo, isPressed);
-		DrawIncludedButton(e, isIncluded, partialIncluded, localParentPackage, out var activeColor);
+        DrawIncludedButton(e, isIncluded, partialIncluded, localParentPackage, out _);
 
 		if (workshopInfo?.Author is not null)
 		{
@@ -130,7 +130,7 @@ public partial class ItemListControl<T>
 
 		DrawThumbnail(e);
 		DrawTitleAndTagsAndVersionForList(e, localParentPackage, workshopInfo, isPressed);
-		DrawIncludedButton(e, isIncluded, partialIncluded, localParentPackage, out var activeColor);
+        DrawIncludedButton(e, isIncluded, partialIncluded, localParentPackage, out _);
 
 		var scoreX = IsPackagePage ? 0 : DrawScore(e, workshopInfo);
 
@@ -191,7 +191,7 @@ public partial class ItemListControl<T>
 			e.Rects.CompatibilityRect = e.Graphics.DrawLargeLabel(
 				point,
 				LocaleCR.Get($"{notificationType}"),
-				"I_CompatibilityReport",
+                "I_CompatibilityReport",
 				notificationType.Value.GetColor(),
 				CompactList ? ContentAlignment.TopLeft : ContentAlignment.TopRight,
 				Padding,
@@ -235,7 +235,7 @@ public partial class ItemListControl<T>
 		Buttons
 	}
 
-	private readonly Dictionary<Columns, (int X, int Width)> _columnSizes = new();
+	private readonly Dictionary<Columns, (int X, int Width)> _columnSizes = [];
 
 	protected override void DrawHeader(PaintEventArgs e)
 	{

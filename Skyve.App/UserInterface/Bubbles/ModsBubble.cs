@@ -13,7 +13,7 @@ public class ModsBubble : StatusBubbleBase
 
 	public ModsBubble()
 	{
-		_compatibilityCounts = new();
+		_compatibilityCounts = [];
 		ServiceCenter.Get(out _settings, out _notifier, out _packageUtil, out _contentManager);
 	}
 

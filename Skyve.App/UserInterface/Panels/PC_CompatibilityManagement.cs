@@ -13,7 +13,7 @@ using System.Windows.Forms;
 namespace Skyve.App.UserInterface.Panels;
 public partial class PC_CompatibilityManagement : PanelContent
 {
-	private readonly Dictionary<ulong, IPackage?> _packages = new();
+	private readonly Dictionary<ulong, IPackage?> _packages = [];
 	private int currentPage;
 	private PostPackage? postPackage;
 	private PostPackage? lastPackageData;
@@ -70,7 +70,7 @@ public partial class PC_CompatibilityManagement : PanelContent
 		}
 	}
 
-	public PC_CompatibilityManagement(ReviewRequest request) : this(new[] { request.PackageId })
+	public PC_CompatibilityManagement(ReviewRequest request) : this([request.PackageId])
 	{
 		_request = request;
 	}
@@ -139,7 +139,7 @@ public partial class PC_CompatibilityManagement : PanelContent
 		PB_Loading.Loading = true;
 
 		var mods = _userService.User.Manager ?
-			await _workshopService.QueryFilesAsync(PackageSorting.UpdateTime, requiredTags: new[] { "Mod" }, all: true) :
+			await _workshopService.QueryFilesAsync(PackageSorting.UpdateTime, requiredTags: ["Mod"], all: true) :
 			await _workshopService.GetWorkshopItemsByUserAsync(_userService.User.Id ?? 0);
 
 		foreach (var mod in mods)
@@ -239,7 +239,7 @@ public partial class PC_CompatibilityManagement : PanelContent
 					postPackage.Stability = PackageStability.Broken;
 				}
 
-				foreach (var item in automatedPackage.Statuses ?? new())
+				foreach (var item in automatedPackage.Statuses ?? [])
 				{
 					if (!postPackage.Statuses.Any(x => x.Type == item.Type))
 					{
@@ -301,7 +301,7 @@ public partial class PC_CompatibilityManagement : PanelContent
 		FLP_Statuses.Controls.Clear(true, x => x is IPackageStatusControl<StatusType, PackageStatus>);
 		FLP_Interactions.Controls.Clear(true, x => x is IPackageStatusControl<InteractionType, PackageInteraction>);
 
-		foreach (var item in postPackage.Tags ?? new())
+		foreach (var item in postPackage.Tags ?? [])
 		{
 			var control = new TagControl { TagInfo = _tagsService.CreateCustomTag(item) };
 			control.Click += TagControl_Click;
@@ -309,10 +309,10 @@ public partial class PC_CompatibilityManagement : PanelContent
 			T_NewTag.SendToBack();
 		}
 
-		SetLinks(postPackage.Links ?? new());
+		SetLinks(postPackage.Links ?? []);
 
-		postPackage.Statuses ??= new();
-		postPackage.Interactions ??= new();
+		postPackage.Statuses ??= [];
+		postPackage.Interactions ??= [];
 
 		if (_request?.IsInteraction ?? false)
 		{
@@ -321,7 +321,7 @@ public partial class PC_CompatibilityManagement : PanelContent
 				Action = (StatusAction)_request.StatusAction,
 				IntType = _request.StatusType,
 				Note = _request.StatusNote,
-				Packages = _request.StatusPackages?.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(ulong.Parse).ToArray(),
+				Packages = _request.StatusPackages?.Split([','], StringSplitOptions.RemoveEmptyEntries).Select(ulong.Parse).ToArray(),
 			});
 		}
 
@@ -332,7 +332,7 @@ public partial class PC_CompatibilityManagement : PanelContent
 				Action = (StatusAction)_request.StatusAction,
 				IntType = _request.StatusType,
 				Note = _request.StatusNote,
-				Packages = _request.StatusPackages?.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(ulong.Parse).ToArray(),
+				Packages = _request.StatusPackages?.Split([','], StringSplitOptions.RemoveEmptyEntries).Select(ulong.Parse).ToArray(),
 			});
 		}
 
@@ -373,8 +373,10 @@ public partial class PC_CompatibilityManagement : PanelContent
 		SetPackage(ModifierKeys.HasFlag(Keys.Shift) ? 0 : (currentPage - 1));
 	}
 
-	private void T_NewTag_Click(object sender, EventArgs e)
-	{
+#pragma warning disable IDE1006 // Naming Styles
+    private void T_NewTag_Click(object sender, EventArgs e)
+#pragma warning restore IDE1006 // Naming Styles
+    {
 		var prompt = ShowInputPrompt(LocaleCR.AddGlobalTag);
 
 		if (prompt.DialogResult != DialogResult.OK)
@@ -401,8 +403,10 @@ public partial class PC_CompatibilityManagement : PanelContent
 		ControlValueChanged(sender, e);
 	}
 
-	private void T_NewLink_Click(object sender, EventArgs e)
-	{
+#pragma warning disable IDE1006 // Naming Styles
+    private void T_NewLink_Click(object sender, EventArgs e)
+#pragma warning restore IDE1006 // Naming Styles
+    {
 		var form = new AddLinkForm(P_Links.Controls.OfType<LinkControl>().ToList(x => x.Link));
 
 		form.Show(Form);
@@ -487,7 +491,7 @@ public partial class PC_CompatibilityManagement : PanelContent
 		postPackage.Stability = DD_Stability.SelectedItem;
 		postPackage.Type = DD_PackageType.SelectedItem;
 		postPackage.Usage = DD_Usage.SelectedItems.Aggregate((prev, next) => prev | next);
-		postPackage.RequiredDLCs = DD_DLCs.SelectedItems.Select(x => x.Id).ToArray();
+		postPackage.RequiredDLCs = [.. DD_DLCs.SelectedItems.Select(x => x.Id)];
 		postPackage.Note = TB_Note.Text;
 		postPackage.Tags = P_Tags.Controls.OfType<TagControl>().Where(x => !string.IsNullOrEmpty(x.TagInfo?.Value)).ToList(x => x.TagInfo!.Value);
 		postPackage.Links = P_Links.Controls.OfType<LinkControl>().ToList(x => (PackageLink)x.Link);
@@ -561,7 +565,7 @@ public partial class PC_CompatibilityManagement : PanelContent
 		I_List.Width = I_List.Height;
 	}
 
-	private void packageCrList1_ItemMouseClick(object sender, MouseEventArgs e)
+	private void PackageCrList1_ItemMouseClick(object sender, MouseEventArgs e)
 	{
 		if (e.Button == MouseButtons.Left)
 		{
