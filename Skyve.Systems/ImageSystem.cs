@@ -12,6 +12,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 
 namespace Skyve.Systems;
 
@@ -22,7 +23,7 @@ internal class ImageSystem : IImageService
 	private readonly Dictionary<string, (Bitmap image, DateTime lastAccessed)> _cache = [];
 	private readonly TimeSpan _expirationTime = TimeSpan.FromMinutes(1);
 	private readonly HttpClient _httpClient = new();
-	private readonly ImageProcessor _imageProcessor;
+    private readonly ImageProcessor _imageProcessor;
 	private readonly INotifier _notifier;
 
 	public ImageSystem(INotifier notifier)
@@ -132,8 +133,37 @@ internal class ImageSystem : IImageService
 
 		try
 		{
-			using var ms = await _httpClient.GetStreamAsync(url);
-			using var img = Image.FromStream(ms);
+			// check url is ok
+            var request = new HttpRequestMessage(HttpMethod.Head, url);
+            var response = await _httpClient.SendAsync(request);
+
+            if(!response.IsSuccessStatusCode && url != null)
+			{
+                string[] parts = url.Split('/');
+                int appsIndex = Array.IndexOf(parts, "apps");
+				string appId = parts[appsIndex + 1]; // 271590
+
+				var newUrl = "https://store.steampowered.com/api/appdetails?appids=" + appId + "&filters=basic";
+
+				var request1 = new HttpRequestMessage(HttpMethod.Head, newUrl);
+
+                var apiResponse = await _httpClient.SendAsync(request1);
+
+                if (!apiResponse.IsSuccessStatusCode)
+				{
+                    return false;
+                }
+
+				var str = await _httpClient.GetStringAsync(newUrl);
+
+                JObject obj = JObject.Parse(str);
+
+                url = obj[appId]?["data"]?["header_image"]?.Value<string>();
+            }
+
+            using var ms = await _httpClient.GetStreamAsync(url);
+
+            using var img = Image.FromStream(ms);
 
 			var squareSize = Math.Min(img.Width, 512);
 			var size = string.IsNullOrEmpty(fileName) ? img.Size.GetProportionalDownscaledSize(squareSize) : img.Size;
@@ -151,18 +181,21 @@ internal class ImageSystem : IImageService
 
 			Directory.GetParent(filePath.FullName).Create();
 
-			lock (LockObj(url))
+			if(url != null)
 			{
-				if (filePath.FullName.EndsWith(".jpg", StringComparison.InvariantCultureIgnoreCase) || filePath.FullName.EndsWith(".jpeg", StringComparison.InvariantCultureIgnoreCase))
-				{
-					image.Save(filePath.FullName, System.Drawing.Imaging.ImageFormat.Jpeg);
-				}
-				else
-				{
-					image.Save(filePath.FullName);
-				}
-			}
-
+                lock (LockObj(url))
+                {
+                    if (filePath.FullName.EndsWith(".jpg", StringComparison.InvariantCultureIgnoreCase) || filePath.FullName.EndsWith(".jpeg", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        image.Save(filePath.FullName, System.Drawing.Imaging.ImageFormat.Jpeg);
+                    }
+                    else
+                    {
+                        image.Save(filePath.FullName);
+                    }
+                }
+            }
+			
 			_notifier.OnRefreshUI();
 
 			return true;
